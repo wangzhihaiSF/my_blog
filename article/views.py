@@ -45,4 +45,20 @@ def article_create(request):
         return render(request, 'article/create.html', context)
 
 
+def article_delete(request, article_id):
+    article = ArticlePost.objects.get(id=article_id)
+    article.delete()
+    return redirect("article:article_list")
+
+
+def article_safe_delete(request, article_id):
+    if request.method == 'POST':
+        article = ArticlePost.objects.get(id=article_id)
+        article.delete()
+        return redirect("article:article_list")
+    else:
+        return HttpResponse("仅允许post请求")
+
+
+
 
