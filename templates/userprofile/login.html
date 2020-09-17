@@ -17,16 +17,23 @@
 
                 {% csrf_token %}
                 <div class="form-group" align="center">
-                    <label for="username">账号：<input type="text" class="form-control" id="username" name="username" style="width: 250px">
+                    <label for="username">
+                        账号：<input type="text" class="form-control" id="username" name="username" style="width: 250px">
                     </label>
 
                 </div>
                 <div class="form-group" align="center">
-                    <label for="password">密码：<input type="password" class="form-control" id="password" name="password" style="width:250px">
+                    <label for="password">
+                        密码：<input type="password" class="form-control" id="password" name="password" style="width:250px">
                     </label>
                 </div>
+                <div align="center">
+                    <button type="submit" class="btn btn-primary" >登录</button>
+                    <h5>忘记密码了？</h5>
+                    <h5>点击<a href='{% url "password_reset_recover" %}'>这里</a>重置密码</h5>
+                </div>
 
-                    <button type="submit" class="btn btn-primary" >提交</button>
+
 
 
             </form>
