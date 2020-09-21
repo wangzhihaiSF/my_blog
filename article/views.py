@@ -25,13 +25,14 @@ def article_detail(request, article_id):
 
 
 def article_create(request):
+    # user = User.objects.get(id=article_id)
     # 判断用户是否提交数据
     if request.method == "POST":
         # 将提交的数据赋值到表单中
         article_post_form = ArticlePostForm(data=request.POST)
         if article_post_form.is_valid():
             new_article = article_post_form.save(commit=False)
-            new_article.author = User.objects.get(id=1)
+            new_article.author = User.objects.get(id=request.user.id)
             new_article.save()
             return redirect("article:article_list")
         else:
