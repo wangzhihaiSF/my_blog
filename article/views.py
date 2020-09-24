@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from article.forms import ArticlePostForm
 from article.models import ArticlePost
+from comment.models import Comment
 
 
 def article_list(request):
@@ -45,6 +46,8 @@ def article_list(request):
 
 def article_detail(request, article_id):
     article = ArticlePost.objects.get(id=article_id)
+    # 取出文章评论
+    comments = Comment.objects.filter(article=article_id)
     # 浏览量 +1
     if request.user != article.author:
         article.total_views += 1
@@ -56,7 +59,7 @@ def article_detail(request, article_id):
         "markdown.extensions.toc", ])
     article.body = md.convert(article.body)
     # 新增了md.toc对象
-    context = {'article': article, 'toc': md.toc}
+    context = {'article': article, 'toc': md.toc, "comments": comments}
     return render(request, "article/detail.html", context)
 
 
