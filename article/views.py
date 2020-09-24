@@ -2,6 +2,7 @@ import markdown
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -11,8 +12,25 @@ from article.models import ArticlePost
 
 
 def article_list(request):
-    # 修改变量名称（articles -> article_list）
-    article_all = ArticlePost.objects.all()
+    search = request.GET.get("search")
+    order = request.GET.get("order")
+    if search:
+        if order == "total_views":
+            article_all = ArticlePost.objects.filter(
+                Q(title__icontains=search) |
+                Q(body__icontains=search)
+            ).order_by("-total_views")
+        else:
+            article_all = ArticlePost.objects.filter(
+                Q(title__icontains=search) |
+                Q(body__icontains=search)
+            ).order_by("-total_views")
+    else:
+        search = ""
+        if order == "total_views":
+            article_all = ArticlePost.objects.all().order_by("-total_views")
+        else:
+            article_all = ArticlePost.objects.all()
 
     # 每页显示 1 篇文章
     paginator = Paginator(article_all, 3)
@@ -21,7 +39,7 @@ def article_list(request):
     # 将导航对象相应的页码内容返回给 articles
     articles_page = paginator.get_page(page)
 
-    context = {'articles_page': articles_page}
+    context = {'articles_page': articles_page, "order": order, "search": search}
     return render(request, 'article/list.html', context)
 
 

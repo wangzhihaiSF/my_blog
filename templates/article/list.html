@@ -12,6 +12,44 @@
 
 <!-- 定义放置文章标题的div容器 -->
 <div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'article:article_list' %}?search={{ search }}">
+                    最新
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'article:article_list' %}?order=total_views&search={{ search }}">
+                    最热
+                </a>
+            </li>
+        </ol>
+    </nav>
+    <!-- 新增，搜索栏 -->
+    <div class="row">
+        <div class="col-auto mr-auto">
+            <form class="form-inline" >
+                <label class="sr-only">content</label>
+                <input type="text"
+                    class="form-control mb-2 mr-sm-2"
+                    name="search"
+                    placeholder="搜索文章..."
+                    required
+                >
+            </form>
+        </div>
+    </div>
+    <!-- 新增，搜索提示语 -->
+    {% if search %}
+        {% if articles_page %}
+            <h4><span style="color: red">"{{ search }}"</span>的搜索结果如下：</h4>
+            <hr>
+        {% else %}
+            <h4>暂无<span style="color: red">"{{ search }}"</span>有关的文章。</h4>
+            <hr>
+        {% endif %}
+    {% endif %}
     <div class="row mt-2">
         {% for article in articles_page %}
         <!-- 文章内容 -->
@@ -46,11 +84,11 @@
         <span class="step-links">
             <!-- 如果不是第一页，则显示上翻按钮 -->
             {% if articles_page.has_previous %}
-                <a href="?page=1" class="btn btn-success">
+                <a href="?page=1&order={{ order }}&search={{ search }}" class="btn btn-success">
                     &laquo;首页
                 </a>
                 <span>...</span>
-                <a href="?page={{ articles_page.previous_page_number }}"
+                <a href="?page={{ articles_page.previous_page_number }}&order={{ order }}&search={{ search }}"
                    class="btn btn-secondary"
                 >
                     {{ articles_page.previous_page_number }}
@@ -64,13 +102,13 @@
 
             <!-- 如果不是最末页，则显示下翻按钮 -->
             {% if articles_page.has_next %}
-                <a href="?page={{ articles_page.next_page_number }}"
+                <a href="?page={{ articles_page.next_page_number }}&order={{ order }}&search={{ search }}"
                    class="btn btn-secondary"
                 >
                     {{ articles_page.next_page_number }}
                 </a>
                 <span>...</span>
-                <a href="?page={{ articles_page.paginator.num_pages }}"
+                <a href="?page={{ articles_page.paginator.num_pages }}&order={{ order }}&search={{ search }}"
                    class="btn btn-success"
                 >
                     尾页 &raquo;
