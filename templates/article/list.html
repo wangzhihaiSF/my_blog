@@ -12,22 +12,23 @@
 
 <!-- 定义放置文章标题的div容器 -->
 <div class="container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{% url 'article:article_list' %}?search={{ search }}">
-                    最新
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{% url 'article:article_list' %}?order=total_views&search={{ search }}">
-                    最热
-                </a>
-            </li>
-        </ol>
-    </nav>
-    <!-- 新增，搜索栏 -->
     <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'article:article_list' %}?search={{ search }}">
+                        最新
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{% url 'article:article_list' %}?order=total_views&search={{ search }}">
+                        最热
+                    </a>
+                </li>
+            </ol>
+        </nav>
+    <!-- 新增，搜索栏 -->
+
         <div class="col-auto mr-auto">
             <form class="form-inline" >
                 <label class="sr-only">content</label>

@@ -49,11 +49,14 @@ def article_detail(request, article_id):
     if request.user != article.author:
         article.total_views += 1
         article.save(update_fields=['total_views'])
-    article.body = markdown.markdown(article.body, extensions=[
+
+    md = markdown.Markdown(extensions=[
         "markdown.extensions.extra",
         "markdown.extensions.codehilite",
-    ])
-    context = {"article": article}
+        "markdown.extensions.toc", ])
+    article.body = md.convert(article.body)
+    # 新增了md.toc对象
+    context = {'article': article, 'toc': md.toc}
     return render(request, "article/detail.html", context)
 
 
@@ -123,7 +126,3 @@ def article_update(request, article_id):
         context = {'article': article, 'article_post_form': article_post_form}
         # 将响应返回到模板中
         return render(request, 'article/update.html', context)
-
-
-
-
