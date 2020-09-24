@@ -1,5 +1,6 @@
 import markdown
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -9,8 +10,17 @@ from article.models import ArticlePost
 
 
 def article_list(request):
-    articles = ArticlePost.objects.all()
-    context = {"articles": articles}
+    # 修改变量名称（articles -> article_list）
+    article_all = ArticlePost.objects.all()
+
+    # 每页显示 1 篇文章
+    paginator = Paginator(article_all, 3)
+    # 获取 url 中的页码
+    page = request.GET.get('page')
+    # 将导航对象相应的页码内容返回给 articles
+    articles_page = paginator.get_page(page)
+
+    context = {'articles_page': articles_page}
     return render(request, 'article/list.html', context)
 
 

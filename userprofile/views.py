@@ -86,19 +86,20 @@ def profile_edit(request, user_id):
         if request.user != user:
             return HttpResponse("你没有权限修改此用户信息")
 
-        profile_form = ProfileForm(data=request.POST)
+        profile_form = ProfileForm(request.POST, request.FILES)
         if profile_form.is_valid():
             profile_cd = profile_form.cleaned_data
             profile.phone = profile_cd["phone"]
-            profile.avatar = profile_cd["avatar"]
             profile.bio = profile_cd["bio"]
+            if 'avatar' in request.FILES:
+                profile.avatar = profile_cd["avatar"]
             profile.save()
             return redirect("userprofile:edit", user_id=user_id)
         else:
             return HttpResponse("注册表单信息有误，请重新输入")
     elif request.method == 'GET':
         profile_form = ProfileForm()
-        context = {'profile_form': profile_form, "profile":profile, 'user': user}
+        context = {'profile_form': profile_form, "profile": profile, 'user': user}
         return render(request, 'userprofile/edit.html', context)
     else:
         return HttpResponse("请使用GET或POST请求数据")

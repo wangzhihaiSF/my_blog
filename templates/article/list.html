@@ -13,8 +13,7 @@
 <!-- 定义放置文章标题的div容器 -->
 <div class="container">
     <div class="row mt-2">
-
-        {% for article in articles %}
+        {% for article in articles_page %}
         <!-- 文章内容 -->
         <div class="col-4 mb-4">
         <!-- 卡片容器 -->
@@ -32,7 +31,46 @@
             </div>
         </div>
         {% endfor %}
+    </div>
 
+</div>
+<!-- 页码导航 -->
+<div class="pagination row">
+    <div class="m-auto">
+        <span class="step-links">
+            <!-- 如果不是第一页，则显示上翻按钮 -->
+            {% if articles_page.has_previous %}
+                <a href="?page=1" class="btn btn-success">
+                    &laquo;首页
+                </a>
+                <span>...</span>
+                <a href="?page={{ articles_page.previous_page_number }}"
+                   class="btn btn-secondary"
+                >
+                    {{ articles_page.previous_page_number }}
+                </a>
+            {% endif %}
+
+            <!-- 当前页面 -->
+            <span class="current btn btn-danger btn-lg">
+                {{ articles_page.number }}
+            </span>
+
+            <!-- 如果不是最末页，则显示下翻按钮 -->
+            {% if articles_page.has_next %}
+                <a href="?page={{ articles_page.next_page_number }}"
+                   class="btn btn-secondary"
+                >
+                    {{ articles_page.next_page_number }}
+                </a>
+                <span>...</span>
+                <a href="?page={{ articles_page.paginator.num_pages }}"
+                   class="btn btn-success"
+                >
+                    尾页 &raquo;
+                </a>
+            {% endif %}
+        </span>
     </div>
 </div>
 {% endblock content %}
