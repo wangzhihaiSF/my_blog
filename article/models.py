@@ -9,6 +9,8 @@ from django.utils import timezone
 
 
 class ArticlePost(models.Model):
+    # 浏览量
+    total_views = models.PositiveIntegerField(default=0)
     # 文章作者。参数 on_delete 用于指定数据删除的方式
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
